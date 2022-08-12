@@ -11,10 +11,11 @@ import 'package:news/domain/models/post_model.dart';
 class MainProvider extends ChangeNotifier {
   String s = 'salom';
   int nBarIndex = 0;
+  int indexPost = 0;
 
   Map<String, bool> isLoaded = {
     'post': false,
-    'comment':false,
+    'comment': false,
   };
   List<PostsModel> listPosts = [];
   Future loadPosts() async {
@@ -26,7 +27,7 @@ class MainProvider extends ChangeNotifier {
           listPosts.add(PostsModel.fromJson(item));
         }
         isLoaded['post'] = true;
-         notifyListeners();
+        notifyListeners();
       } else {
         //_showMessage('Unknown error');
       }
@@ -44,10 +45,16 @@ class MainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  setIndexPost(int num) {
+    indexPost = num;
+    notifyListeners();
+  }
+
   setIsLoaded(String key, bool b) {
     isLoaded[key] = b;
     notifyListeners();
   }
+
   //---------------------------------------------------------
   //---------------------------------------------------------
   List<CommentsModel> listComments = [];
@@ -60,7 +67,7 @@ class MainProvider extends ChangeNotifier {
           listComments.add(CommentsModel.fromJson(item));
         }
         isLoaded['comment'] = true;
-         notifyListeners();
+        notifyListeners();
       } else {
         //_showMessage('Unknown error');
       }

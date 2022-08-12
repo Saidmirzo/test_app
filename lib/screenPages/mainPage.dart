@@ -15,7 +15,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  
   @override
   Widget build(BuildContext context) {
     return Consumer<MainProvider>(
@@ -32,12 +31,15 @@ class _MainPageState extends State<MainPage> {
             ),
           ),
           bottomNavigationBar: BottomNavigationBar(
+            selectedLabelStyle: sTextStyle(color: Colors.white),
             items: const <BottomNavigationBarItem>[
+              
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.home,
                   color: Colors.white,
                 ),
+
                 label: 'News',
                 backgroundColor: Color(0xff322B54),
               ),
@@ -73,7 +75,7 @@ class _MainPageState extends State<MainPage> {
               provider.setNBarIndex(context);
             },
             elevation: 5,
-            iconSize: 40,
+            iconSize: 30,
           ),
           body: Builder(
             builder: (context) {
