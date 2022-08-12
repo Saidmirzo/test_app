@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:news/domain/providers/mainProvider.dart';
-import 'package:news/screenPages/mainPage.dart';
+import 'package:news/domain/providers/main_provider.dart';
+import 'package:news/screenPages/main_page.dart';
 import 'package:news/utils/const.dart';
 import 'package:provider/provider.dart';
 

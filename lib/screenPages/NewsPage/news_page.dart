@@ -4,12 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:news/domain/providers/mainProvider.dart';
-import 'package:news/screenPages/NewsPage/commentsPage.dart';
+
 import 'package:news/utils/const.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/Widgets/widgets.dart';
+import '../../domain/providers/main_provider.dart';
+import 'comments_page.dart';
 
 class NewsPage extends StatefulWidget {
   const NewsPage({Key? key}) : super(key: key);
@@ -25,6 +26,8 @@ class _NewsPageState extends State<NewsPage>
   @override
   void initState() {
     super.initState();
+    
+
     _controller =
         AnimationController(vsync: this, duration: Duration(seconds: 1));
     animG =

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:news/domain/models/coments_model.dart';
-import 'package:news/domain/providers/mainProvider.dart';
+import 'package:news/domain/providers/main_provider.dart';
 import 'package:news/main.dart';
 import 'package:provider/provider.dart';
 

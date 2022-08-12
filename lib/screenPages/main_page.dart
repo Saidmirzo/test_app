@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:news/domain/providers/mainProvider.dart';
-import 'package:news/screenPages/Gallerypage/gallerypage.dart';
+import 'package:news/domain/providers/main_provider.dart';
+import 'package:news/screenPages/check_page/check_page.dart';
 import 'package:news/utils/const.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-import 'NewsPage/newsPage.dart';
+import 'NewsPage/news_page.dart';
+import 'gallery_page/gallery_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -25,7 +26,7 @@ class _MainPageState extends State<MainPage> {
             backgroundColor: const Color(0xff28214B),
             title: Center(
               child: Text(
-                'News',
+                context.watch<MainProvider>().titleAppBar,
                 style: sTextStyle(
                     color: Colors.white, size: 22, fontWeight: FontWeight.w400),
               ),
@@ -81,10 +82,14 @@ class _MainPageState extends State<MainPage> {
               if (context.watch<MainProvider>().nBarIndex < 3) {
                 switch (context.watch<MainProvider>().nBarIndex) {
                   case 0:
+           
                     return const NewsPage();
                   case 1:
+               
                     return const GalleryPage();
-                  
+                  case 2:
+                 
+                    return const Checkpage();
                   default:
                 }
               }

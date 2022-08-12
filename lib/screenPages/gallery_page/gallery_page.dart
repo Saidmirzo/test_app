@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:news/domain/providers/mainProvider.dart';
-import 'package:news/screenPages/Gallerypage/photosPage.dart';
-import 'package:news/screenPages/NewsPage/commentsPage.dart';
+import 'package:news/domain/providers/main_provider.dart';
+import 'package:news/screenPages/NewsPage/comments_page.dart';
+import 'package:news/screenPages/gallery_page/photos_page.dart';
 import 'package:news/utils/const.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +26,7 @@ class _GalleryPageState extends State<GalleryPage>
   @override
   void initState() {
     super.initState();
+   
     _controller =
         AnimationController(vsync: this, duration: Duration(seconds: 1));
     animG =
@@ -44,9 +45,8 @@ class _GalleryPageState extends State<GalleryPage>
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    late List listnews;
     return Consumer<MainProvider>(builder: (context, provider, child) {
-      if (context.watch<MainProvider>().isLoaded['post'] ?? false) {
+      if (context.watch<MainProvider>().isLoaded['gallery'] ?? false) {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
           color: const Color(0xff0F0C20),
@@ -102,36 +102,24 @@ class _GalleryPageState extends State<GalleryPage>
 
   Container animContainer() {
     return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          color: const Color(0xff0F0C20),
-          child: GridView.count(
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            childAspectRatio: 1.1,
-            crossAxisCount: 2,
-            children: List.generate(
-                context.watch<MainProvider>().listGallery.length, (index) {
-              var list = context.watch<MainProvider>().listGallery;
-              return InkWell(
-                
-                child: Container(
-                    alignment: Alignment.bottomCenter,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Expanded(
-                        child: Text(
-                      list[index].title!,
-                      style: sTextStyle(color: Colors.white, size: 18),
-                    ))),
-              );
-            }),
-          ),
-        );
+      color: const Color(0xff0F0C20),
+      child: GridView.count(
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        childAspectRatio: 1.1,
+        crossAxisCount: 2,
+        children: List.generate(10, (index) {
+          var list = context.watch<MainProvider>().listGallery;
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+          );
+        }),
+      ),
+    );
   }
 }
