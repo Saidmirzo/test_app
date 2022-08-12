@@ -103,8 +103,7 @@ class _CommentsPageState extends State<CommentsPage>
                         ),
                         Expanded(
                           child: ListView(
-                            children:
-                                List.generate(2, (index) {
+                            children: List.generate(2, (index) {
                               return Container(
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 10),
@@ -171,8 +170,8 @@ class _CommentsPageState extends State<CommentsPage>
                 ),
               ),
               InkWell(
-                onTap: (){
-                   Navigator.push(
+                onTap: () {
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => FiveCommentsPage(),
@@ -219,7 +218,19 @@ class _CommentsPageState extends State<CommentsPage>
           ),
         );
       } else {
-        return AnimLoad(animContainer(),animG: animGradient);
+        return Scaffold(
+           backgroundColor: const Color(0xff0F0C21),
+          appBar: AppBar(
+            backgroundColor: const Color(0xff221B44),
+            title: Center(
+              child: Text(
+                'Loading ...',
+                style: sTextStyle(color: Colors.white, size: 22),
+              ),
+            ),
+          ),
+          body: AnimLoad(animContainer(), animG: animGradient),
+        );
       }
     });
   }
@@ -231,43 +242,45 @@ class _CommentsPageState extends State<CommentsPage>
     } else
       natija = s;
     return natija;
-  } ListView animContainer() {
-    return ListView(
-      children: [
-        Container(
-          height: 10,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
-
-        ),
-        Container(
-          height: 20,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
-
-        ),
-        Container(
-          height: 100,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
-
-        ),
-        Container(
-          height: 100,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
-
-        ),
-      ]
-    );
   }
 
+  Column animContainer() {
+    return Column(children: [
+      const SizedBox(
+        height: 30,
+      ),
+      Container(
+        margin: const EdgeInsets.symmetric(vertical: 15),
+        height: 10,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      Container(
+        margin: const EdgeInsets.symmetric(vertical: 15),
+        height: 20,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        height: 100,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        height: 100,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    ]);
+  }
 }

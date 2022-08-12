@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news/domain/providers/mainProvider.dart';
+import 'package:news/screenPages/Gallerypage/gallerypage.dart';
 import 'package:news/utils/const.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -33,13 +34,11 @@ class _MainPageState extends State<MainPage> {
           bottomNavigationBar: BottomNavigationBar(
             selectedLabelStyle: sTextStyle(color: Colors.white),
             items: const <BottomNavigationBarItem>[
-              
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.home,
                   color: Colors.white,
                 ),
-
                 label: 'News',
                 backgroundColor: Color(0xff322B54),
               ),
@@ -83,7 +82,9 @@ class _MainPageState extends State<MainPage> {
                 switch (context.watch<MainProvider>().nBarIndex) {
                   case 0:
                     return const NewsPage();
-
+                  case 1:
+                    return const GalleryPage();
+                  
                   default:
                 }
               }

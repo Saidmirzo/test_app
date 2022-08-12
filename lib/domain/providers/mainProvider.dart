@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
+import 'package:news/domain/models/alboms_model.dart';
 import 'package:news/domain/models/coments_model.dart';
 import 'package:news/domain/models/post_model.dart';
 
@@ -12,10 +13,12 @@ class MainProvider extends ChangeNotifier {
   String s = 'salom';
   int nBarIndex = 0;
   int indexPost = 0;
+  int indexGallery = 0;
 
   Map<String, bool> isLoaded = {
     'post': false,
     'comment': false,
+    'gallery': false,
   };
   List<PostsModel> listPosts = [];
   Future loadPosts() async {
@@ -50,6 +53,11 @@ class MainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  setIndexGallery(int num) {
+    indexGallery = num;
+    notifyListeners();
+  }
+
   setIsLoaded(String key, bool b) {
     isLoaded[key] = b;
     notifyListeners();
@@ -67,6 +75,31 @@ class MainProvider extends ChangeNotifier {
           listComments.add(CommentsModel.fromJson(item));
         }
         isLoaded['comment'] = true;
+        notifyListeners();
+      } else {
+        //_showMessage('Unknown error');
+      }
+    } on SocketException {
+      // _showMessage('Connection error');
+      //_loadData();
+
+    } catch (e) {
+      //_showMessage(e.toString());
+    }
+  }
+
+  //---------------------------------------------------------
+  //---------------------------------------------------------
+  List<AlbomsModel> listGallery = [];
+  Future loadGallery() async {
+    try {
+      var response =
+          await get(Uri.parse('https://jsonplaceholder.typicode.com/albums'));
+      if (response.statusCode == 200) {
+        for (final item in jsonDecode(response.body)) {
+          listGallery.add(AlbomsModel.fromJson(item));
+        }
+        isLoaded['gallery'] = true;
         notifyListeners();
       } else {
         //_showMessage('Unknown error');
