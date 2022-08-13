@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:news/domain/models/coments_model.dart';
 import 'package:news/domain/providers/main_provider.dart';
-import 'package:news/main.dart';
 import 'package:provider/provider.dart';
 
-import '../../domain/Widgets/widgets.dart';
 import '../../utils/const.dart';
 
 class FiveCommentsPage extends StatefulWidget {
@@ -26,7 +22,7 @@ class _FiveCommentsPageState extends State<FiveCommentsPage>
   void initState() {
     super.initState();
     _controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
+        AnimationController(vsync: this, duration:const  Duration(seconds: 1));
     animGradient =
         Tween<Alignment>(begin: Alignment.topLeft, end: Alignment.bottomRight)
             .animate(_controller);
@@ -46,11 +42,11 @@ class _FiveCommentsPageState extends State<FiveCommentsPage>
     List<CommentsModel> listCommentsAll =
         context.watch<MainProvider>().listComments;
     listComments.clear();
-    listCommentsAll.forEach((element) {
+    for (var element in listCommentsAll) {
       if (element.postId == context.watch<MainProvider>().indexPost + 1) {
         listComments.add(element);
       }
-    });
+    }
 
     return Consumer(builder: (context, provider, child) {
       return Scaffold(
@@ -138,8 +134,9 @@ class _FiveCommentsPageState extends State<FiveCommentsPage>
     String natija;
     if (s.length >= 18) {
       natija = '${s.substring(0, 18)}...';
-    } else
+    } else {
       natija = s;
+    }
     return natija;
   }
 }

@@ -1,12 +1,7 @@
-import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:news/domain/providers/main_provider.dart';
-import 'package:news/screenPages/NewsPage/comments_page.dart';
-import 'package:news/screenPages/gallery_page/photos_page.dart';
+import 'package:news/screen_pages/gallery_page/photos_page.dart';
 import 'package:news/utils/const.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +23,7 @@ class _GalleryPageState extends State<GalleryPage>
     super.initState();
    
     _controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
+        AnimationController(vsync: this, duration:const  Duration(seconds: 1));
     animG =
         Tween<Alignment>(begin: Alignment.topLeft, end: Alignment.bottomRight)
             .animate(_controller);
@@ -70,7 +65,7 @@ class _GalleryPageState extends State<GalleryPage>
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Photospage(),
+                      builder: (context) =>const  Photospage(),
                     ),
                   );
                 },
@@ -111,7 +106,6 @@ class _GalleryPageState extends State<GalleryPage>
         childAspectRatio: 1.1,
         crossAxisCount: 2,
         children: List.generate(10, (index) {
-          var list = context.watch<MainProvider>().listGallery;
           return Container(
             decoration: BoxDecoration(
               color: Colors.white,

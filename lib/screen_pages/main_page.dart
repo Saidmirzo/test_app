@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:news/domain/providers/main_provider.dart';
-import 'package:news/screenPages/check_page/check_page.dart';
+import 'package:news/screen_pages/contacts_page/contacts_page.dart';
 import 'package:news/utils/const.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 import 'NewsPage/news_page.dart';
+import 'check_page/check_page.dart';
 import 'gallery_page/gallery_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -73,23 +72,38 @@ class _MainPageState extends State<MainPage> {
             selectedItemColor: Colors.black,
             onTap: (context) {
               provider.setNBarIndex(context);
+              switch (context) {
+                case 0:
+                  provider.setTitleAppBar('News');
+                  break;
+                case 1:
+                  provider.setTitleAppBar('Gallery');
+                  break;
+                case 2:
+                  provider.setTitleAppBar('Check');
+                  break;
+                case 3:
+                  provider.setTitleAppBar('Contacts');
+                  break;
+
+                default:
+              }
             },
             elevation: 5,
             iconSize: 30,
           ),
           body: Builder(
             builder: (context) {
-              if (context.watch<MainProvider>().nBarIndex < 3) {
+              if (context.watch<MainProvider>().nBarIndex <= 3) {
                 switch (context.watch<MainProvider>().nBarIndex) {
                   case 0:
-           
                     return const NewsPage();
                   case 1:
-               
                     return const GalleryPage();
                   case 2:
-                 
-                    return const Checkpage();
+                    return const CheckPage();
+                  case 3:
+                    return const ContactsPage();
                   default:
                 }
               }

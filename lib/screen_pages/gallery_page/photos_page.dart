@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:news/domain/providers/main_provider.dart';
-import 'package:news/screenPages/main_page.dart';
 import 'package:news/utils/const.dart';
 import 'package:provider/provider.dart';
 
@@ -47,7 +44,6 @@ class _PhotospageState extends State<Photospage> {
             crossAxisCount: 3,
             children: List.generate(
                 context.watch<MainProvider>().listGallery.length, (index) {
-              var list = context.watch<MainProvider>().listGallery;
               return Container(
                 decoration: BoxDecoration(
                   color: const Color(0xffB6B6B6),

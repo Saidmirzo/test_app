@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:news/utils/const.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/Widgets/widgets.dart';
 import '../../domain/providers/main_provider.dart';
 
-class Checkpage extends StatefulWidget {
-  const Checkpage({Key? key}) : super(key: key);
+class CheckPage extends StatefulWidget {
+  const CheckPage({Key? key}) : super(key: key);
 
   @override
-  State<Checkpage> createState() => _CheckpageState();
+  State<CheckPage> createState() => _CheckPageState();
 }
 
-class _CheckpageState extends State<Checkpage>
+class _CheckPageState extends State<CheckPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Alignment> animG;
@@ -31,6 +29,12 @@ class _CheckpageState extends State<Checkpage>
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, provider, child) {
       if (context.watch<MainProvider>().isLoaded['todos'] ?? false) {
@@ -41,7 +45,7 @@ class _CheckpageState extends State<Checkpage>
                 context.watch<MainProvider>().listCheck.length, (index) {
               var list = context.watch<MainProvider>().listCheck;
               return Container(
-                margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                 child: Row(
                   children: [
                     Checkbox(

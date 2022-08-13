@@ -1,9 +1,5 @@
-import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 import 'package:news/utils/const.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +25,7 @@ class _NewsPageState extends State<NewsPage>
     
 
     _controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
+        AnimationController(vsync: this, duration:const  Duration(seconds: 1));
     animG =
         Tween<Alignment>(begin: Alignment.topLeft, end: Alignment.bottomRight)
             .animate(_controller);
@@ -45,7 +41,6 @@ class _NewsPageState extends State<NewsPage>
 
   @override
   Widget build(BuildContext context) {
-    late List listnews;
     return Consumer<MainProvider>(builder: (context, provider, child) {
       if (context.watch<MainProvider>().isLoaded['post'] ?? false) {
         return Container(
@@ -60,7 +55,7 @@ class _NewsPageState extends State<NewsPage>
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CommentsPage(),
+                      builder: (context) =>const  CommentsPage(),
                     ),
                   );
                 },

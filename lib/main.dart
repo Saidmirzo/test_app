@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news/domain/providers/main_provider.dart';
-import 'package:news/screenPages/main_page.dart';
+import 'package:news/screen_pages/main_page.dart';
 import 'package:provider/provider.dart';
 
 void main() {
