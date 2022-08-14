@@ -1,9 +1,10 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AnimLoad extends StatelessWidget {
-   AnimLoad(
-     this._widget, {
+  AnimLoad(
+    this._widget, {
     Key? key,
     required this.animG,
   }) : super(key: key);
@@ -16,7 +17,7 @@ class AnimLoad extends StatelessWidget {
       color: Colors.black,
       child: Stack(
         children: [
-         _widget,
+          _widget,
           AnimatedBuilder(
               animation: animG,
               builder: (context, child) {
@@ -39,3 +40,5 @@ class AnimLoad extends StatelessWidget {
     );
   }
 }
+
+

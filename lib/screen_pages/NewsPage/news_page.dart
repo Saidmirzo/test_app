@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:news/utils/const.dart';
@@ -6,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../domain/Widgets/widgets.dart';
 import '../../domain/providers/main_provider.dart';
+import '../../main.dart';
 import 'comments_page.dart';
 
 class NewsPage extends StatefulWidget {
@@ -22,10 +22,9 @@ class _NewsPageState extends State<NewsPage>
   @override
   void initState() {
     super.initState();
-    
 
     _controller =
-        AnimationController(vsync: this, duration:const  Duration(seconds: 1));
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
     animG =
         Tween<Alignment>(begin: Alignment.topLeft, end: Alignment.bottomRight)
             .animate(_controller);
@@ -51,11 +50,12 @@ class _NewsPageState extends State<NewsPage>
               var list = context.watch<MainProvider>().listPosts;
               return InkWell(
                 onTap: () {
+                  // notify();
                   provider.setIndexPost(list[index].id! - 1);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>const  CommentsPage(),
+                      builder: (context) => const CommentsPage(),
                     ),
                   );
                 },
