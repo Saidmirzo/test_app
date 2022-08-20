@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news/domain/models/post_model.dart';
 
 import 'package:news/utils/const.dart';
-import 'package:provider/provider.dart';
 
+import '../../bloc/news/news_bloc.dart';
 import '../../domain/Widgets/widgets.dart';
 import '../../domain/providers/main_provider.dart';
 import '../../main.dart';
@@ -15,20 +17,15 @@ class NewsPage extends StatefulWidget {
   State<NewsPage> createState() => _NewsPageState();
 }
 
-class _NewsPageState extends State<NewsPage>
-    with SingleTickerProviderStateMixin {
+class _NewsPageState extends State<NewsPage> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Alignment> animG;
   @override
   void initState() {
     super.initState();
 
-    _controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1));
-    animG =
-        Tween<Alignment>(begin: Alignment.topLeft, end: Alignment.bottomRight)
-            .animate(_controller);
-    context.read<MainProvider>().loadPosts();
+    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    animG = Tween<Alignment>(begin: Alignment.topLeft, end: Alignment.bottomRight).animate(_controller);
     _controller.repeat();
   }
 
@@ -40,68 +37,70 @@ class _NewsPageState extends State<NewsPage>
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MainProvider>(builder: (context, provider, child) {
-      if (context.watch<MainProvider>().isLoaded['post'] ?? false) {
+    return BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
+      if (state is NewsStateComplatedLoadPosts) {
+        List<PostsModel> list = state.listPosts;
         return Container(
           color: const Color(0xff0F0C20),
-          child: ListView(
-            children: List.generate(
-                context.watch<MainProvider>().listPosts.length, (index) {
-              var list = context.watch<MainProvider>().listPosts;
-              return InkWell(
-                onTap: () {
-                  // notify();
-                  provider.setIndexPost(list[index].id! - 1);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CommentsPage(),
+          child: RefreshIndicator(
+            onRefresh: () async { context.read<NewsBloc>().add(const NewsEventLoadPosts());},
+            child: ListView.builder(
+              physics:const  BouncingScrollPhysics(),
+              itemCount: list.length,
+              itemBuilder: ((context, index) {
+                return InkWell(
+                  onTap: () {
+                    // notify();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CommentsPage(list[index].title!, list[index].body!, list[index].id!),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xff221B44),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                  );
-                },
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: const Color(0xff221B44),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          list[index].title!,
-                          style: sTextStyle(color: Colors.white, size: 18),
+                    child: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            list[index].title!,
+                            style: sTextStyle(color: Colors.white, size: 18),
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          list[index].body!,
-                          style: sTextStyle(
-                              color: Colors.white,
-                              size: 16,
-                              fontWeight: FontWeight.w300),
+                        const SizedBox(
+                          height: 10,
                         ),
-                      ),
-                    ],
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            list[index].body!,
+                            style: sTextStyle(color: Colors.white, size: 16, fontWeight: FontWeight.w300),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }),
+                );
+              }),
+            ),
+          ),
+        );
+      } else if (state is NewsStateFailed) {
+        return Center(
+          child: Text(
+            'Connection error',
+            style: sTextStyle(color: Colors.red, size: 20),
           ),
         );
       } else {
-        return AnimLoad(
-          animContainer(),
-          animG: animG,
-        );
+        return AnimLoad(animContainer(), animG: animG);
       }
     });
   }

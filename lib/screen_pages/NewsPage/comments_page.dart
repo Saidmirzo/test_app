@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news/domain/models/coments_model.dart';
-import 'package:news/domain/providers/main_provider.dart';
-import 'package:provider/provider.dart';
-
+import '../../bloc/news/news_bloc.dart';
 import '../../domain/Widgets/widgets.dart';
 import '../../utils/const.dart';
 import 'five_comments.dart';
 
 class CommentsPage extends StatefulWidget {
-  const CommentsPage({Key? key}) : super(key: key);
-
+  CommentsPage(this.title, this.body, this.id, {Key? key}) : super(key: key);
+  String title;
+  String body;
+  int id;
   @override
   State<CommentsPage> createState() => _CommentsPageState();
 }
 
-class _CommentsPageState extends State<CommentsPage>
-    with SingleTickerProviderStateMixin {
+class _CommentsPageState extends State<CommentsPage> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Alignment> animGradient;
 
@@ -23,12 +23,9 @@ class _CommentsPageState extends State<CommentsPage>
   @override
   void initState() {
     super.initState();
-    _controller =
-        AnimationController(vsync: this, duration:const  Duration(seconds: 1));
-    animGradient =
-        Tween<Alignment>(begin: Alignment.topLeft, end: Alignment.bottomRight)
-            .animate(_controller);
-    context.read<MainProvider>().loadComments();
+    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    animGradient = Tween<Alignment>(begin: Alignment.topLeft, end: Alignment.bottomRight).animate(_controller);
+    context.read<NewsBloc>().add(const NewsEventLoadComments());
     _controller.repeat();
   }
 
@@ -40,196 +37,186 @@ class _CommentsPageState extends State<CommentsPage>
 
   @override
   Widget build(BuildContext context) {
-    var listPosts = context.watch<MainProvider>().listPosts;
-    List<CommentsModel> listCommentsAll =
-        context.watch<MainProvider>().listComments;
-    listComments.clear();
-    for (var element in listCommentsAll) {
-      if (element.postId == context.watch<MainProvider>().indexPost + 1) {
-        listComments.add(element);
-      }
-    }
-
-    return Consumer(builder: (context, provider, child) {
-      if (context.watch<MainProvider>().isLoaded['comment'] ?? false) {
-        return Scaffold(
-          backgroundColor: const Color(0xff0F0C21),
-          appBar: AppBar(
-            backgroundColor: const Color(0xff221B44),
-            title: Center(
-              child: Text(
-                cutTitle(
-                    listPosts[context.watch<MainProvider>().indexPost].title!),
-                style: sTextStyle(color: Colors.white, size: 22),
+    return BlocBuilder<NewsBloc, NewsState>(
+      builder: (context, state) {
+        if (state is NewsStateComplatedLoadComments) {
+          List<CommentsModel> listCommentsAll = state.listComments;
+          listComments.clear();
+          for (var element in listCommentsAll) {
+            if (element.postId == widget.id) {
+              listComments.add(element);
+            }
+          }
+          return Scaffold(
+            backgroundColor: const Color(0xff0F0C21),
+            appBar: AppBar(
+              backgroundColor: const Color(0xff221B44),
+              title: Center(
+                child: Text(
+                  cutTitle(widget.title),
+                  style: sTextStyle(color: Colors.white, size: 22),
+                ),
               ),
             ),
-          ),
-          body: Column(
-            children: [
-              Expanded(
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                  width: double.infinity,
-                  height: double.infinity,
-                  color: const Color(0xff0F0C21),
-                  child: Expanded(
-                    child: Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            listPosts[context.watch<MainProvider>().indexPost]
-                                .title!,
-                            style: sTextStyle(color: Colors.white, size: 18),
+            body: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                    width: double.infinity,
+                    height: double.infinity,
+                    color: const Color(0xff0F0C21),
+                    child: Expanded(
+                      child: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              widget.title,
+                              style: sTextStyle(color: Colors.white, size: 18),
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            listPosts[context.watch<MainProvider>().indexPost]
-                                .body!,
-                            style: sTextStyle(color: Colors.white, size: 14),
+                          const SizedBox(
+                            height: 15,
                           ),
-                        ),
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        Expanded(
-                          child: ListView(
-                            children: List.generate(2, (index) {
-                              return Container(
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 15),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xff221B44),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Container(
-                                          alignment: Alignment.center,
-                                          height: 50,
-                                          width: 50,
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xff232440),
-                                            borderRadius:
-                                                BorderRadius.circular(25),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              widget.body,
+                              style: sTextStyle(color: Colors.white, size: 14),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          Expanded(
+                            child: ListView(
+                              children: List.generate(2, (index) {
+                                return Container(
+                                  margin: const EdgeInsets.symmetric(vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xff221B44),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.center,
+                                            height: 50,
+                                            width: 50,
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xff232440),
+                                              borderRadius: BorderRadius.circular(25),
+                                            ),
+                                            child: const Icon(
+                                              Icons.person,
+                                              color: Color(0xff96969B),
+                                            ),
                                           ),
-                                          child: const Icon(
-                                            Icons.person,
-                                            color: Color(0xff96969B),
+                                          const SizedBox(
+                                            width: 10,
                                           ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            listComments[index].name!,
-                                            style: sTextStyle(
-                                                color: Colors.white,
-                                                size: 16,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 15,
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        listComments[index].body!,
-                                        style: sTextStyle(
-                                          color: Colors.white,
-                                          size: 12,
-                                        ),
+                                          Expanded(
+                                            child: Text(
+                                              listComments[index].name!,
+                                              style: sTextStyle(
+                                                  color: Colors.white, size: 16, fontWeight: FontWeight.w500),
+                                            ),
+                                          )
+                                        ],
                                       ),
-                                    )
-                                  ],
-                                ),
-                              );
-                            }),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          listComments[index].body!,
+                                          style: sTextStyle(
+                                            color: Colors.white,
+                                            size: 12,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              }),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FiveCommentsPage(listComments, widget.title),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    height: 60,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: const Color(0xff6C63FD),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.all(15),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Show me',
+                                style: sTextStyle(color: Colors.white, size: 18),
+                              ),
+                              Text(
+                                '5 result',
+                                style: sTextStyle(color: Colors.white, size: 18),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.all(15),
+                          child: Icon(
+                            Icons.remove_red_eye,
+                            color: Colors.white,
                           ),
                         ),
                       ],
                     ),
                   ),
+                )
+              ],
+            ),
+          );
+        } else {
+          return Scaffold(
+            backgroundColor: const Color(0xff0F0C21),
+            appBar: AppBar(
+              backgroundColor: const Color(0xff221B44),
+              title: Center(
+                child: Text(
+                  'Loading ...',
+                  style: sTextStyle(color: Colors.white, size: 22),
                 ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>const  FiveCommentsPage(),
-                    ),
-                  );
-                },
-                child: Container(
-                  height: 60,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: const Color(0xff6C63FD),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.all(15),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Show me',
-                              style: sTextStyle(color: Colors.white, size: 18),
-                            ),
-                            Text(
-                              '5 result',
-                              style: sTextStyle(color: Colors.white, size: 18),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(15),
-                        child: Icon(
-                          Icons.remove_red_eye,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-        );
-      } else {
-        return Scaffold(
-           backgroundColor: const Color(0xff0F0C21),
-          appBar: AppBar(
-            backgroundColor: const Color(0xff221B44),
-            title: Center(
-              child: Text(
-                'Loading ...',
-                style: sTextStyle(color: Colors.white, size: 22),
               ),
             ),
-          ),
-          body: AnimLoad(animContainer(), animG: animGradient),
-        );
-      }
-    });
+            body: AnimLoad(animContainer(), animG: animGradient),
+          );
+        }
+      },
+    );
   }
 
   String cutTitle(String s) {

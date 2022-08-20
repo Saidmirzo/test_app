@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:news/domain/providers/main_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news/bloc/main_bloc/bloc/main_bloc.dart';
 import 'package:news/screen_pages/contacts_page/contacts_page.dart';
 import 'package:news/utils/const.dart';
-import 'package:provider/provider.dart';
 
+import '../bloc/check/check_bloc.dart';
+import '../bloc/contacts/contact_bloc.dart';
+import '../bloc/gallery/gallery_bloc.dart';
+import '../bloc/news/news_bloc.dart';
 import 'NewsPage/news_page.dart';
 import 'check_page/check_page.dart';
 import 'gallery_page/gallery_page.dart';
@@ -16,18 +20,34 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  PageController controllerPage = PageController();
+  late List<String> titleList = ['News', 'Gallery', 'Check', 'Contacts'];
+  late String title;
+  loadElements() async {
+    context.read<ContactBloc>().add(ContactEventLoadContact());
+    context.read<CheckBloc>().add(const CheckEventLoadTodos());
+    context.read<GalleryBloc>().add(const GalleryEventLoadAlboms());
+  }
+
+  int indexNbar = 0;
+  @override
+  void initState() {
+    context.read<NewsBloc>().add(const NewsEventLoadPosts());
+    super.initState();
+    title = titleList[0];
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<MainProvider>(
-      builder: (context, provider, child) {
+    return BlocBuilder<MainBloc, MainState>(
+      builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: const Color(0xff28214B),
             title: Center(
               child: Text(
-                context.watch<MainProvider>().titleAppBar,
-                style: sTextStyle(
-                    color: Colors.white, size: 22, fontWeight: FontWeight.w400),
+                titleList[state.indexPage],
+                style: sTextStyle(color: Colors.white, size: 22, fontWeight: FontWeight.w400),
               ),
             ),
           ),
@@ -68,47 +88,25 @@ class _MainPageState extends State<MainPage> {
               ),
             ],
             type: BottomNavigationBarType.shifting,
-            currentIndex: context.watch<MainProvider>().nBarIndex,
+            currentIndex: state.indexPage,
             selectedItemColor: Colors.black,
-            onTap: (context) {
-              provider.setNBarIndex(context);
-              switch (context) {
-                case 0:
-                  provider.setTitleAppBar('News');
-                  break;
-                case 1:
-                  provider.setTitleAppBar('Gallery');
-                  break;
-                case 2:
-                  provider.setTitleAppBar('Check');
-                  break;
-                case 3:
-                  provider.setTitleAppBar('Contacts');
-                  break;
-
-                default:
-              }
+            onTap: (index) {
+              controllerPage.animateToPage(index, duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
+              context.read<MainBloc>().add(MainEventSetIndexPage(index));
+              title = titleList[index];
             },
             elevation: 5,
             iconSize: 30,
           ),
-          body: Builder(
-            builder: (context) {
-              if (context.watch<MainProvider>().nBarIndex <= 3) {
-                switch (context.watch<MainProvider>().nBarIndex) {
-                  case 0:
-                    return const NewsPage();
-                  case 1:
-                    return const GalleryPage();
-                  case 2:
-                    return const CheckPage();
-                  case 3:
-                    return const ContactsPage();
-                  default:
-                }
-              }
-              return const NewsPage();
-            },
+          body: PageView(
+            onPageChanged: ((value) {}),
+            controller: controllerPage,
+            children: const [
+              NewsPage(),
+              GalleryPage(),
+              CheckPage(),
+              ContactsPage(),
+            ],
           ),
         );
       },

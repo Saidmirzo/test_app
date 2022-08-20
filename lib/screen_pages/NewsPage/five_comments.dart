@@ -6,27 +6,22 @@ import 'package:provider/provider.dart';
 import '../../utils/const.dart';
 
 class FiveCommentsPage extends StatefulWidget {
-  const FiveCommentsPage({Key? key}) : super(key: key);
-
+  FiveCommentsPage(this.listComments,this.title, {Key? key}) : super(key: key);
+  List<CommentsModel> listComments;
+  String title;
   @override
   State<FiveCommentsPage> createState() => _FiveCommentsPageState();
 }
 
-class _FiveCommentsPageState extends State<FiveCommentsPage>
-    with SingleTickerProviderStateMixin {
+class _FiveCommentsPageState extends State<FiveCommentsPage> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Alignment> animGradient;
 
-  List<CommentsModel> listComments = [];
   @override
   void initState() {
     super.initState();
-    _controller =
-        AnimationController(vsync: this, duration:const  Duration(seconds: 1));
-    animGradient =
-        Tween<Alignment>(begin: Alignment.topLeft, end: Alignment.bottomRight)
-            .animate(_controller);
-    context.read<MainProvider>().loadComments();
+    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    animGradient = Tween<Alignment>(begin: Alignment.topLeft, end: Alignment.bottomRight).animate(_controller);
     _controller.repeat();
   }
 
@@ -38,16 +33,6 @@ class _FiveCommentsPageState extends State<FiveCommentsPage>
 
   @override
   Widget build(BuildContext context) {
-    var listPosts = context.watch<MainProvider>().listPosts;
-    List<CommentsModel> listCommentsAll =
-        context.watch<MainProvider>().listComments;
-    listComments.clear();
-    for (var element in listCommentsAll) {
-      if (element.postId == context.watch<MainProvider>().indexPost + 1) {
-        listComments.add(element);
-      }
-    }
-
     return Consumer(builder: (context, provider, child) {
       return Scaffold(
         backgroundColor: const Color(0xff0F0C21),
@@ -55,8 +40,7 @@ class _FiveCommentsPageState extends State<FiveCommentsPage>
           backgroundColor: const Color(0xff221B44),
           title: Center(
             child: Text(
-              cutTitle(
-                  listPosts[context.watch<MainProvider>().indexPost].title!),
+              cutTitle(widget.title),
               style: sTextStyle(color: Colors.white, size: 22),
             ),
           ),
@@ -70,8 +54,7 @@ class _FiveCommentsPageState extends State<FiveCommentsPage>
             children: List.generate(5, (index) {
               return Container(
                 margin: const EdgeInsets.symmetric(vertical: 10),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 decoration: BoxDecoration(
                   color: const Color(0xff221B44),
                   borderRadius: BorderRadius.circular(10),
@@ -98,11 +81,8 @@ class _FiveCommentsPageState extends State<FiveCommentsPage>
                         ),
                         Expanded(
                           child: Text(
-                            listComments[index].name!,
-                            style: sTextStyle(
-                                color: Colors.white,
-                                size: 16,
-                                fontWeight: FontWeight.w500),
+                            widget.listComments[index].name!,
+                            style: sTextStyle(color: Colors.white, size: 16, fontWeight: FontWeight.w500),
                           ),
                         )
                       ],
@@ -113,7 +93,7 @@ class _FiveCommentsPageState extends State<FiveCommentsPage>
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        listComments[index].body!,
+                        widget.listComments[index].body!,
                         style: sTextStyle(
                           color: Colors.white,
                           size: 12,
