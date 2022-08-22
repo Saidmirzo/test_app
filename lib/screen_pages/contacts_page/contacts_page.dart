@@ -19,6 +19,8 @@ class _ContactsPageState extends State<ContactsPage> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
+    context.read<ContactBloc>().add(ContactEventLoadContact());
+
     _controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
     animG = Tween<Alignment>(begin: Alignment.topLeft, end: Alignment.bottomRight).animate(_controller);
     _controller.repeat();

@@ -23,16 +23,11 @@ class _MainPageState extends State<MainPage> {
   PageController controllerPage = PageController();
   late List<String> titleList = ['News', 'Gallery', 'Check', 'Contacts'];
   late String title;
-  loadElements() async {
-    context.read<ContactBloc>().add(ContactEventLoadContact());
-    context.read<CheckBloc>().add(const CheckEventLoadTodos());
-    context.read<GalleryBloc>().add(const GalleryEventLoadAlboms());
-  }
+ 
 
   int indexNbar = 0;
   @override
   void initState() {
-    context.read<NewsBloc>().add(const NewsEventLoadPosts());
     super.initState();
     title = titleList[0];
   }
@@ -99,7 +94,10 @@ class _MainPageState extends State<MainPage> {
             iconSize: 30,
           ),
           body: PageView(
-            onPageChanged: ((value) {}),
+            onPageChanged: ((index) {
+               context.read<MainBloc>().add(MainEventSetIndexPage(index));
+              title = titleList[index];
+            }),
             controller: controllerPage,
             children: const [
               NewsPage(),

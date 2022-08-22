@@ -25,7 +25,7 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
             for (final item in jsonDecode(response.body)) {
               listAlboms.add(AlbomsModel.fromJson(item));
             }
-            emit(GalleryStateComplatedLoadPosts(listAlboms: listAlboms));
+            emit(GalleryStateComplatedLoaded(listAlboms: listAlboms));
           } else {}
         } on SocketException {
           emit(const GalleryStateFailed('Connection error'));
@@ -34,24 +34,6 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
         }
       },
     );
-    on<GalleryEventLoadImages>(
-      (event, emit) async {
-        try {
-          List<PhotosModel> listPhotos = [];
-          emit(const GalleryStateInProgress());
-          var response = await get(Uri.parse('https://jsonplaceholder.typicode.com/photos'));
-          if (response.statusCode == 200) {
-            for (final item in jsonDecode(response.body)) {
-              listPhotos.add(PhotosModel.fromJson(item));
-            }
-            emit(GalleryStateComplatedLoadImages(listImages: listPhotos));
-          } else {}
-        } on SocketException {
-          emit(const GalleryStateFailed('Connection error'));
-        } catch (e) {
-          emit(GalleryStateFailed(e.toString()));
-        }
-      },
-    );
+   
   }
 }

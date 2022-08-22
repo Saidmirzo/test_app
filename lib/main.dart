@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news/bloc/check/check_bloc.dart';
 import 'package:news/bloc/contacts/contact_bloc.dart';
+import 'package:news/bloc/gallery/bloc/photos_bloc.dart';
 import 'package:news/bloc/gallery/gallery_bloc.dart';
 import 'package:news/bloc/main_bloc/bloc/main_bloc.dart';
+import 'package:news/bloc/news/bloc/comments_bloc.dart';
 import 'package:news/screen_pages/main_page.dart';
 
 import 'bloc/news/news_bloc.dart';
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<NewsBloc>(
           create: ((context) => NewsBloc()),
         ),
-         BlocProvider<ContactBloc>(
+        BlocProvider<ContactBloc>(
           create: ((context) => ContactBloc()),
         ),
         BlocProvider<GalleryBloc>(
@@ -34,6 +36,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<MainBloc>(
           create: ((context) => MainBloc()),
+        ),
+        BlocProvider<CommentsBloc>(
+          create: ((context) => CommentsBloc()),
+        ),
+        BlocProvider<PhotosBloc>(
+          create: ((context) => PhotosBloc()),
         ),
       ],
       child: const MaterialApp(

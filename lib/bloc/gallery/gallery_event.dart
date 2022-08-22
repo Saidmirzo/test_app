@@ -11,10 +11,4 @@ class GalleryEventLoadAlboms extends GalleryEvent {
   List<Object?> get props => [];
 
 }
-class GalleryEventLoadImages extends GalleryEvent {
-  const GalleryEventLoadImages();
-  
-  @override
-  List<Object?> get props => [];
 
-}

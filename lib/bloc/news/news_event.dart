@@ -14,9 +14,4 @@ class NewsEventLoadPosts extends NewsEvent {
 }
 
 
-class NewsEventLoadComments extends NewsEvent {
-  const NewsEventLoadComments();
 
-  @override
-  List<Object?> get props => [];
-}

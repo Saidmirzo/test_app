@@ -23,6 +23,7 @@ class _NewsPageState extends State<NewsPage> with SingleTickerProviderStateMixin
   @override
   void initState() {
     super.initState();
+    context.read<NewsBloc>().add(const NewsEventLoadPosts());
 
     _controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
     animG = Tween<Alignment>(begin: Alignment.topLeft, end: Alignment.bottomRight).animate(_controller);
@@ -37,15 +38,18 @@ class _NewsPageState extends State<NewsPage> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    context.read<NewsBloc>().add(const NewsEventLoadPosts());
     return BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
       if (state is NewsStateComplatedLoadPosts) {
         List<PostsModel> list = state.listPosts;
         return Container(
           color: const Color(0xff0F0C20),
           child: RefreshIndicator(
-            onRefresh: () async { context.read<NewsBloc>().add(const NewsEventLoadPosts());},
+            onRefresh: () async {
+              context.read<NewsBloc>().add(const NewsEventLoadPosts());
+            },
             child: ListView.builder(
-              physics:const  BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               itemCount: list.length,
               itemBuilder: ((context, index) {
                 return InkWell(

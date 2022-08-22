@@ -23,12 +23,7 @@ class NewsStateComplatedLoadPosts extends NewsState {
   @override
   List<Object?> get props => [listPosts];
 }
-class NewsStateComplatedLoadComments extends NewsState {
-  const NewsStateComplatedLoadComments({required this.listComments});
-  final List<CommentsModel> listComments;
-  @override
-  List<Object?> get props => [listComments];
-}
+
 
 class NewsStateFailed extends NewsState {
   const NewsStateFailed(this.message);

@@ -18,22 +18,15 @@ class GalleryStateInProgress extends GalleryState {
   List<Object?> get props => [];
 }
 
-class GalleryStateComplatedLoadPosts extends GalleryState {
-  const GalleryStateComplatedLoadPosts({required this.listAlboms});
+class GalleryStateComplatedLoaded extends GalleryState {
+  const GalleryStateComplatedLoaded({required this.listAlboms});
   final List<AlbomsModel> listAlboms;
   
 
   @override
   List<Object?> get props => [listAlboms];
 }
-class GalleryStateComplatedLoadImages extends GalleryState {
-  const GalleryStateComplatedLoadImages({required this.listImages});
-  final List<PhotosModel> listImages;
-  
 
-  @override
-  List<Object?> get props => [listImages];
-}
 
 
 class GalleryStateFailed extends GalleryState {

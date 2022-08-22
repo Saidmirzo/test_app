@@ -19,6 +19,8 @@ class _CheckPageState extends State<CheckPage> with SingleTickerProviderStateMix
   @override
   void initState() {
     super.initState();
+    context.read<CheckBloc>().add(const CheckEventLoadTodos());
+
     _controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
     animG = Tween<Alignment>(begin: Alignment.topLeft, end: Alignment.bottomRight).animate(_controller);
     _controller.repeat();

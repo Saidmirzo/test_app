@@ -19,6 +19,7 @@ class _GalleryPageState extends State<GalleryPage> with SingleTickerProviderStat
   @override
   void initState() {
     super.initState();
+    context.read<GalleryBloc>().add(const GalleryEventLoadAlboms());
 
     _controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
     animG = Tween<Alignment>(begin: Alignment.topLeft, end: Alignment.bottomRight).animate(_controller);
@@ -36,7 +37,7 @@ class _GalleryPageState extends State<GalleryPage> with SingleTickerProviderStat
     var size = MediaQuery.of(context).size;
     return BlocBuilder<GalleryBloc, GalleryState>(
       builder: (context, state) {
-        if (state is GalleryStateComplatedLoadPosts) {
+        if (state is GalleryStateComplatedLoaded) {
           List<AlbomsModel> listAlboms = state.listAlboms;
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -46,7 +47,7 @@ class _GalleryPageState extends State<GalleryPage> with SingleTickerProviderStat
                 context.read<GalleryBloc>().add(const GalleryEventLoadAlboms());
               },
               child: GridView.count(
-                physics:const BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
                 crossAxisSpacing: 10,
@@ -75,11 +76,10 @@ class _GalleryPageState extends State<GalleryPage> with SingleTickerProviderStat
                           color: const Color(0xffF44236),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Expanded(
-                            child: Text(
+                        child: Text(
                           listAlboms[index].title!,
                           style: sTextStyle(color: Colors.white, size: 18),
-                        ))),
+                        )),
                   );
                 }),
               ),

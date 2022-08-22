@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news/bloc/gallery/bloc/photos_bloc.dart';
 import 'package:news/bloc/gallery/gallery_bloc.dart';
 import 'package:news/domain/models/photos_model.dart';
 import 'package:news/utils/const.dart';
@@ -15,16 +16,16 @@ class _PhotospageState extends State<Photospage> {
   @override
   void initState() {
     super.initState();
-    context.read<GalleryBloc>().add(const GalleryEventLoadImages());
+    context.read<PhotosBloc>().add( PhotosEventLoadPhotos());
   }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return BlocBuilder<GalleryBloc, GalleryState>(
+    return BlocBuilder<PhotosBloc, PhotosState>(
       builder: (context, state) {
-        if (state is GalleryStateComplatedLoadImages) {
-          List<PhotosModel> list = state.listImages;
+        if (state is PhotosStateComplated) {
+          List<PhotosModel> list = state.listPgotos;
           return Scaffold(
             appBar: AppBar(
               backgroundColor: const Color(0xff241F48),
